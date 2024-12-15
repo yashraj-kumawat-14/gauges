@@ -27,16 +27,16 @@
     });
 
     // Function to update gauge values dynamically
-    function updateGauges(heartbeat, temperature) {
-      gaugeHeart.refresh(heartbeat);
-      gaugeTemp.refresh(temperature);
-    }
+    // function updateGauges(heartbeat, temperature) {
+    //   gaugeHeart.refresh(heartbeat);
+    //   gaugeTemp.refresh(temperature);
+    // }
 
-    // Listen for messages from MIT App Inventor
-    window.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data); // Parse incoming data as JSON
-      updateGauges(data.heartbeat, data.temperature);
-    });
+    // // Listen for messages from MIT App Inventor
+    // window.addEventListener("message", (event) => {
+    //   const data = JSON.parse(event.data); // Parse incoming data as JSON
+    //   updateGauges(data.heartbeat, data.temperature);
+    // });
   </script>
 </body>
 </html>
