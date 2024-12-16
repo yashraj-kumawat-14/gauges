@@ -1,42 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/justgage@1.4.0/justgage.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature and Heartbeat Gauges</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .gauge {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .gauge:after {
+            content: '';
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            background: #f9f9f9;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .gauge span {
+            position: absolute;
+            font-size: 1.5em;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .title {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .gauge {
+                width: 150px;
+                height: 150px;
+            }
+
+            .gauge span {
+                font-size: 1.2em;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="gaugeHeart" style="width:300px; height:200px; margin: 20px auto;"></div>
-  <div id="gaugeTemp" style="width:300px; height:200px; margin: 20px auto;"></div>
+    <div class="container">
+        <div class="gauge" id="tempGauge">
+            <span id="tempValue">24°C</span>
+        </div>
+        <div class="title">Temperature</div>
 
-  <script>
-    // Initialize the gauges
-    let gaugeHeart = new JustGage({
-      id: "gaugeHeart",
-      value: 0,
-      min: 0,
-      max: 200,
-      title: "Heartbeat (BPM)"
-    });
+        <div class="gauge" id="heartGauge">
+            <span id="heartValue">0 BPM</span>
+        </div>
+        <div class="title">Heartbeat</div>
+    </div>
 
-    let gaugeTemp = new JustGage({
-      id: "gaugeTemp",
-      value: 0,
-      min: 0,
-      max: 50,
-      title: "Temperature (°C)"
-    });
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('https://your-api-url.com/data');
+                const data = await response.json();
 
-    // Function to update gauge values dynamically
-    // function updateGauges(heartbeat, temperature) {
-    //   gaugeHeart.refresh(heartbeat);
-    //   gaugeTemp.refresh(temperature);
-    // }
+                // Update the gauges
+                document.getElementById('tempValue').textContent = `${24}°C`;
+                document.getElementById('heartValue').textContent = `${data.heartbeat} BPM`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
 
-    // // Listen for messages from MIT App Inventor
-    // window.addEventListener("message", (event) => {
-    //   const data = JSON.parse(event.data); // Parse incoming data as JSON
-    //   updateGauges(data.heartbeat, data.temperature);
-    // });
-  </script>
+        // Fetch data every 5 seconds
+        setInterval(fetchData, 5000);
+        fetchData(); // Initial fetch
+    </script>
 </body>
 </html>
